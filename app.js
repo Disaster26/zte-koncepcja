@@ -17,7 +17,7 @@
     se:{n:'Sekretariat ZTE',r:'Zakład Transportu Energetyki Połaniec',t:'15 865 02 65',tt:'+48158650265',m:'sekretariat@ztepolaniec.pl'}
   };
   const U={
-    transport:{n:'Transport ciężki i ponadgabarytowy',o:'mh',q:'Co przewozimy?',opc:['Maszyna budowlana','Element ponadgabarytowy','Konstrukcja stalowa','Materiał sypki','Kontener','Inny ładunek'],
+    transport:{n:'Transport ciężki i ponadgabarytowy',o:'mh',q:'Co przewozimy?',opc:['Maszyna budowlana','Ponadgabaryt','Konstrukcja stalowa','Materiał sypki','Kontener','Inny ładunek'],
       pola:[['skad','Miejsce załadunku','np. Połaniec'],['dokad','Miejsce rozładunku','np. Rzeszów']],
       lista:['masa i wymiary ładunku (dł. × szer. × wys.)','zdjęcie ładunku i miejsca załadunku','czy potrzebny załadunek dźwigiem lub ładowarką']},
     sprzet:{n:'Wynajem sprzętu z operatorem',o:'mh',q:'Jaki sprzęt?',opc:['Koparka','Minikoparka','Ładowarka','Spychacz','Walec','Ciągnik','Kosiarka','Zagęszczarka'],
@@ -90,7 +90,7 @@
   $('szczegoly').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const v=b.dataset.v;st.sz.has(v)?st.sz.delete(v):st.sz.add(v);b.setAttribute('aria-pressed',st.sz.has(v));rysuj();oznaczPark()});
   $('polaDod').addEventListener('input',e=>{if(e.target.dataset.k){st.dod[e.target.dataset.k]=e.target.value;rysuj()}});
   ['miejsce','dataT','firmaK','osobaK','telK','uwagi'].forEach(i=>$(i).addEventListener('input',rysuj));
-  $('kKopiuj').addEventListener('click',async()=>{const b=$('kKopiuj');try{await navigator.clipboard.writeText(tekst());b.textContent='Skopiowano ✓'}catch(e){b.textContent='Zaznacz i skopiuj'}setTimeout(()=>b.textContent='Kopiuj treść',1800)});
+  $('kKopiuj').addEventListener('click',async()=>{const b=$('kKopiuj');try{await navigator.clipboard.writeText(tekst());b.textContent='Skopiowano'}catch(e){b.textContent='Zaznacz i skopiuj'}setTimeout(()=>b.textContent='Kopiuj treść',1800)});
 
   /* przyciski "Zapytaj o..." z kart uslug */
   document.querySelectorAll('.do-zap').forEach(b=>b.addEventListener('click',()=>{ustawUsl(b.dataset.usl);document.getElementById('zapytanie').scrollIntoView({behavior:'smooth'})}));
@@ -99,12 +99,12 @@
   const PARK={
     ziemne:[['Koparki kołowe i gąsienicowe','łyżka 0,6 m³','Koparka','sprzet'],['Minikoparki','prace w ciasnych miejscach','Minikoparka','sprzet'],['Ładowarki','łyżka 3,5 m³','Ładowarka','sprzet'],['Ładowarka teleskopowa Manitou','łyżka 2,0 m³ · łyżka zamykana 1,2 m³ · widły','Ładowarka','sprzet'],['Spychacze','DT-75, T-130','Spychacz','sprzet'],['Walce i zagęszczarki','zagęszczanie podbudów i nasypów','Walec','sprzet']],
     transport:[['Zestaw niskopodwoziowy','do 30 t','Maszyna budowlana','transport'],['Ciągniki siodłowe','do zestawów i naczep','Materiał sypki','transport'],['Naczepy samowyładowcze','45, 55, 67 i 100 m³','Materiał sypki','transport'],['Samochody samowyładowcze','10 m³','Materiał sypki','transport'],['Hakowiec i kontenery','podstawianie i wywóz kontenerów','Kontener','transport']],
-    dzwigi:[['Żuraw samochodowy Hydros','6,3 t','Element ponadgabarytowy','transport'],['Żuraw samochodowy IFA','11 t','Element ponadgabarytowy','transport']],
+    dzwigi:[['Żuraw samochodowy Hydros','6,3 t','Ponadgabaryt','transport'],['Żuraw samochodowy IFA','11 t','Ponadgabaryt','transport']],
     spec:[['Mobilna jednostka ssąca SAND 130 D ATEX','ssanie i przepompowywanie w strefach Ex','Strefa zagrożenia wybuchem','atex'],['Zamiatarka bezpyłowa SR 2000','sprzątanie hal i placów','Hala produkcyjna','atex'],['Ciągnik rolniczy z kosiarką bijakową','koszenie poboczy i terenów','Koszenie poboczy','teren']]
   };
   let grupa='ziemne';
   function rysujPark(){
-    $('maszyny').innerHTML=PARK[grupa].map((m,i)=>{const w=st.usl===m[3]&&st.sz.has(m[0]);return '<li><div><b>'+m[0]+'</b><small>'+m[1]+'</small></div><button type="button" data-i="'+i+'" aria-pressed="'+w+'">'+(w?'W zapytaniu ✓':'+ Do zapytania')+'</button></li>'}).join('');
+    $('maszyny').innerHTML=PARK[grupa].map((m,i)=>{const w=st.usl===m[3]&&st.sz.has(m[0]);return '<li><div><b>'+m[0]+'</b><small>'+m[1]+'</small></div><button type="button" data-i="'+i+'" aria-pressed="'+w+'">'+(w?'W zapytaniu':'Dodaj do zapytania')+'</button></li>'}).join('');
   }
   function oznaczPark(){rysujPark()}
   function licznik(){const n=st.sz.size;$('parkLicz').textContent=n?(n+' '+(n===1?'pozycja':n<5?'pozycje':'pozycji')+' w zapytaniu: '+U[st.usl].n.toLowerCase()):'Nic jeszcze nie dodano do zapytania';}
